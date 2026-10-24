@@ -1,0 +1,132 @@
+{
+  "type": "FeatureCollection",
+  "name": "girirakshak_hydrological_reference_buffers",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ref_yamuna_floodplain",
+        "name": "Yamuna River Corridor (Delhi-NCR)",
+        "river": "Yamuna",
+        "basin_type": "Riparian Buffer & Active Floodplain Zone (O-Zone)",
+        "danger_level_m": 205.33,
+        "warning_level_m": 204.50,
+        "source": "Delhi Development Authority Master Plan & Central Water Commission Gauging",
+        "provenance": "PUBLIC_REFERENCE_GEOMETRY",
+        "disclaimer": "Hydrological buffer geometry for spatial orientation. Does not represent real-time confirmed flood extent."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.2100, 28.7200],
+            [77.2280, 28.7050],
+            [77.2450, 28.6650],
+            [77.2560, 28.6180],
+            [77.2880, 28.5600],
+            [77.3300, 28.5100],
+            [77.3450, 28.5200],
+            [77.3050, 28.5800],
+            [77.2720, 28.6300],
+            [77.2600, 28.6750],
+            [77.2350, 28.7250],
+            [77.2100, 28.7200]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ref_hindon_corridor",
+        "name": "Hindon River Lowland Buffer (Ghaziabad-Noida)",
+        "river": "Hindon",
+        "basin_type": "Active Drainage Floodplain Buffer",
+        "danger_level_m": 201.00,
+        "warning_level_m": 200.20,
+        "source": "UP Irrigation Department & District Flood Management Plan",
+        "provenance": "PUBLIC_REFERENCE_GEOMETRY",
+        "disclaimer": "Hydrological buffer geometry for spatial orientation. Does not represent real-time confirmed flood extent."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.4100, 28.7200],
+            [77.4250, 28.6800],
+            [77.4350, 28.6350],
+            [77.4420, 28.5800],
+            [77.4580, 28.5300],
+            [77.4720, 28.5350],
+            [77.4520, 28.5900],
+            [77.4450, 28.6450],
+            [77.4380, 28.6900],
+            [77.4200, 28.7280],
+            [77.4100, 28.7200]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ref_mithi_basin",
+        "name": "Mithi River Catchment & Estuary Buffer (Mumbai)",
+        "river": "Mithi",
+        "basin_type": "Urban Estuarine Drainage Corridor",
+        "danger_level_m": 4.50,
+        "warning_level_m": 3.80,
+        "source": "Brihanmumbai Stormwater Drainage (BRIMSTOWAD) Reference",
+        "provenance": "PUBLIC_REFERENCE_GEOMETRY",
+        "disclaimer": "Hydrological buffer geometry for spatial orientation. Does not represent real-time confirmed flood extent."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [72.8400, 19.0400],
+            [72.8600, 19.0550],
+            [72.8750, 19.0750],
+            [72.8900, 19.1100],
+            [72.9050, 19.1350],
+            [72.8900, 19.1380],
+            [72.8680, 19.1050],
+            [72.8550, 19.0700],
+            [72.8350, 19.0480],
+            [72.8400, 19.0400]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ref_brahmaputra_channel",
+        "name": "Brahmaputra Riparian Inundation Zone (Guwahati)",
+        "river": "Brahmaputra",
+        "basin_type": "Major River Basin Riparian Corridor",
+        "danger_level_m": 49.68,
+        "warning_level_m": 49.00,
+        "source": "Brahmaputra Board & Central Water Commission Gauging Archive",
+        "provenance": "PUBLIC_REFERENCE_GEOMETRY",
+        "disclaimer": "Hydrological buffer geometry for spatial orientation. Does not represent real-time confirmed flood extent."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [91.6800, 26.1800],
+            [91.7300, 26.1950],
+            [91.7800, 26.2050],
+            [91.8200, 26.2000],
+            [91.8220, 26.1750],
+            [91.7750, 26.1800],
+            [91.7250, 26.1700],
+            [91.6780, 26.1600],
+            [91.6800, 26.1800]
+          ]
+        ]
+      }
+    }
+  ]
+}

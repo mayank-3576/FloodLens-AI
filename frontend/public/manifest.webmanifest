@@ -1,0 +1,18 @@
+{
+  "name": "FloodLens AI — Local Flood Awareness & Early Warning",
+  "short_name": "FloodLens AI",
+  "description": "Multi-stage flood early warning, local rainfall monitoring, historical flood records, and community intelligence platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8FAFC",
+  "theme_color": "#0F766E",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
