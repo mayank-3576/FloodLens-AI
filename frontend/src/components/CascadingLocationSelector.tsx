@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { MapPin, ChevronRight, Search, Building2, Navigation, AlertTriangle, CheckCircle } from 'lucide-react';
+import { MapPin, ChevronRight, Search, Building2, Navigation, AlertTriangle, CheckCircle, Globe } from 'lucide-react';
 import { Location, LocationHierarchyResponse, TownItem } from '../types';
 import { api } from '../services/api';
+import { useTranslation } from '../context/LanguageContext';
 
 interface CascadingLocationSelectorProps {
   locations: Location[];
@@ -16,6 +17,7 @@ export const CascadingLocationSelector: React.FC<CascadingLocationSelectorProps>
   onSelectLocation,
   compact = false
 }) => {
+  const { t } = useTranslation();
   const [hierarchyData, setHierarchyData] = useState<LocationHierarchyResponse | null>(null);
   const [selectedState, setSelectedState] = useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
@@ -203,7 +205,7 @@ export const CascadingLocationSelector: React.FC<CascadingLocationSelectorProps>
           <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search town, district, or state..."
+            placeholder={t('search_placeholder', 'Search town, district, or state...')}
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
@@ -248,7 +250,7 @@ export const CascadingLocationSelector: React.FC<CascadingLocationSelectorProps>
         {/* 1. STATE SELECT */}
         <div>
           <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-            1. Select State
+            {t('select_state', '1. Select State / UT')}
           </label>
           <div className="relative">
             <select
@@ -266,7 +268,7 @@ export const CascadingLocationSelector: React.FC<CascadingLocationSelectorProps>
         {/* 2. DISTRICT SELECT */}
         <div>
           <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-            2. Select District
+            {t('select_district', '2. Select District')}
           </label>
           <div className="relative">
             <select
@@ -284,7 +286,7 @@ export const CascadingLocationSelector: React.FC<CascadingLocationSelectorProps>
         {/* 3. TOWN / LOCALITY SELECT */}
         <div>
           <label className="block text-[11px] font-bold uppercase tracking-wider text-teal-800 mb-1.5">
-            3. Focus Town / Locality
+            {t('select_town', '3. Focus Town / City')}
           </label>
           <div className="relative">
             <select

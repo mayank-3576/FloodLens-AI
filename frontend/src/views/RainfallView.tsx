@@ -128,11 +128,11 @@ export const RainfallView: React.FC<RainfallViewProps> = ({
         desc: 'Stored locally in browser cache'
       };
     }
-    if (source === 'HISTORICAL_PUBLIC' || source === 'OFFICIAL_RECORD') {
+    if (source === 'OFFICIAL_OBSERVED' || source === 'HISTORICAL_PUBLIC' || source === 'OFFICIAL_RECORD') {
       return {
-        label: 'Official Historical Record',
-        badgeClass: 'bg-teal-50 text-teal-900 border-teal-300 font-semibold',
-        desc: 'Government meteorological registry'
+        label: 'Official NWDP / IMD Observed',
+        badgeClass: 'bg-teal-50 text-teal-900 border-teal-300 font-bold',
+        desc: 'National Water Data Portal & IMD daily gridded telemetry'
       };
     }
     return {
@@ -159,7 +159,7 @@ export const RainfallView: React.FC<RainfallViewProps> = ({
             >
               {locations.map((loc) => (
                 <option key={loc.id} value={loc.id}>
-                  {loc.name}
+                  {loc.town ? `${loc.town} (${loc.district}, ${loc.state})` : loc.name}
                 </option>
               ))}
             </select>

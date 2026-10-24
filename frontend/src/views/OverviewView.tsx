@@ -39,6 +39,7 @@ import { MapComponent } from '../components/MapComponent';
 import { CascadingLocationSelector } from '../components/CascadingLocationSelector';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/LanguageContext';
 
 interface OverviewViewProps {
   summary: DashboardSummary | null;
@@ -62,6 +63,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   isLoading
 }) => {
   const { user } = useAuth();
+  const { t, language } = useTranslation();
   const [townRisk, setTownRisk] = useState<TownRiskResponse | null>(null);
   const [riskLoading, setRiskLoading] = useState<boolean>(false);
   const [reportModalOpen, setReportModalOpen] = useState<boolean>(false);
@@ -232,11 +234,29 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               <span className="text-xs font-medium text-slate-600 bg-white/60 px-2.5 py-1 rounded-full">
                 Basin: <strong>{active_location.basin_name || 'River Catchment'}</strong>
               </span>
+
+              {/* Data Coverage & Micro-Gauge Presence Badge */}
+              {townRisk?.has_dedicated_gauge ? (
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3 text-emerald-700" />
+                  <span>Dedicated AWS Micro-Sensor</span>
+                </span>
+              ) : (
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 border border-amber-300 flex items-center gap-1" title={townRisk?.data_coverage_note || 'District-level NWIC telemetry applied'}>
+                  <AlertTriangle className="w-3 h-3 text-amber-700" />
+                  <span>District AWS Telemetry (No micro-gauge)</span>
+                </span>
+              )}
             </div>
 
             <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 mt-2">
               Estimated Risk Window: {townRisk?.estimated_risk_period || 'Normal - No impending flood hazard identified'}
             </h2>
+            {townRisk && !townRisk.has_dedicated_gauge && townRisk.data_coverage_note && (
+              <p className="text-xs text-amber-900 bg-amber-50/90 border border-amber-200/90 rounded-lg px-2.5 py-1 mt-1 font-medium">
+                {townRisk.data_coverage_note}
+              </p>
+            )}
           </div>
 
           {/* Action Trigger Buttons */}
@@ -246,7 +266,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               className="px-4 py-2 rounded-xl bg-teal-800 hover:bg-teal-900 text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-all"
             >
               <FilePlus className="w-3.5 h-3.5" />
-              <span>Report Local Flooding</span>
+              <span>{t('report_waterlogging', 'Report Local Flooding')}</span>
             </button>
             <button
               onClick={() => onNavigateTab('early-warning')}

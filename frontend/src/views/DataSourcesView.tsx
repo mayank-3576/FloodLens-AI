@@ -10,13 +10,16 @@ import {
   CheckCircle2,
   XCircle,
   Info,
-  Check
+  Check,
+  Key,
+  AlertTriangle
 } from 'lucide-react';
 import { DataSource, ImportSummaryResponse } from '../types';
 import { api } from '../services/api';
 
 export const DataSourcesView: React.FC = () => {
   const [sources, setSources] = useState<DataSource[]>([]);
+  const [statusReport, setStatusReport] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   // File Upload State
@@ -29,8 +32,12 @@ export const DataSourcesView: React.FC = () => {
     const fetchSources = async () => {
       try {
         setLoading(true);
-        const res = await api.getDataSources();
+        const [res, report] = await Promise.all([
+          api.getDataSources(),
+          api.getDataSourcesStatusReport().catch(() => null)
+        ]);
         setSources(res);
+        setStatusReport(report);
       } catch (err) {
         console.error('Failed to load data sources:', err);
       } finally {
@@ -89,6 +96,102 @@ export const DataSourcesView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Official Government Connection & Credential Audit Report */}
+      {statusReport && (
+        <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-soft space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                <span>Official Data Connections &amp; Credential Audit</span>
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Status report on live government hydro-meteorological pipelines and API authentication
+              </p>
+            </div>
+            <span className="text-[11px] font-mono text-slate-500 bg-slate-50 px-2 py-1 rounded border">
+              Obs Date: {statusReport.latest_official_observation_date}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Connected Public Sources */}
+            <div className="space-y-2">
+              <div className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Connected Official Sources</span>
+              </div>
+              <div className="space-y-2">
+                {statusReport.connected_sources?.map((cs: any) => (
+                  <div key={cs.id} className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-200/70 text-xs">
+                    <div className="flex items-center justify-between font-bold text-emerald-950">
+                      <span>{cs.name}</span>
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-mono">
+                        {cs.status}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-emerald-800 mt-1">
+                      Resolution: {cs.observation_resolution}
+                    </div>
+                    <a
+                      href={cs.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] text-teal-800 hover:underline flex items-center gap-1 mt-1 font-semibold"
+                    >
+                      <span>Verify Official Portal</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Credentials-Required Sources & Data Gap Transparency */}
+            <div className="space-y-2">
+              <div className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Key className="w-3.5 h-3.5 text-amber-600" />
+                <span>API Credentials &amp; Telemetry Gateways</span>
+              </div>
+              <div className="space-y-2">
+                {statusReport.credentials_required_sources?.map((cr: any) => (
+                  <div key={cr.id} className="p-3 rounded-xl bg-amber-50/50 border border-amber-200/70 text-xs">
+                    <div className="flex items-center justify-between font-bold text-amber-950">
+                      <span>{cr.name}</span>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
+                        cr.credentials_configured ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'
+                      }`}>
+                        {cr.credentials_configured ? 'Configured' : 'Key Required'}
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-amber-900 mt-1">
+                      Env Variable: <code className="bg-amber-100/80 px-1 rounded">{cr.env_variable}</code>
+                    </div>
+                    <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                      {cr.access_status}
+                    </p>
+                  </div>
+                ))}
+
+                {/* Location Coverage & Gap Summary */}
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                  <div className="font-bold text-slate-900 flex items-center justify-between">
+                    <span>Pan-India Coverage Completeness</span>
+                    <span className="text-teal-700 font-extrabold">{statusReport.location_coverage?.coverage_completeness_pct}%</span>
+                  </div>
+                  <div className="text-[11px] text-slate-600 mt-1">
+                    {statusReport.location_coverage?.dedicated_micro_gauge_count} Dedicated Gauges &bull; {statusReport.location_coverage?.district_gridded_telemetry_count} District Gridded Telemetry Towns
+                  </div>
+                  <p className="text-[10px] text-slate-500 mt-1">
+                    {statusReport.location_coverage?.data_gap_note}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Dataset Provenance Table */}
       <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-soft space-y-4">

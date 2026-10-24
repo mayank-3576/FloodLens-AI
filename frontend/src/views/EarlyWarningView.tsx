@@ -145,7 +145,9 @@ export const EarlyWarningView: React.FC<EarlyWarningViewProps> = ({
             >
               <option value="all">All Monitored Basins</option>
               {locations.map((loc) => (
-                <option key={loc.id} value={loc.id}>{loc.name}</option>
+                <option key={loc.id} value={loc.id}>
+                  {loc.town ? `${loc.town} (${loc.district}, ${loc.state})` : loc.name}
+                </option>
               ))}
             </select>
             <button

@@ -502,6 +502,57 @@ def test_admin_quality_performance_and_coverage(client):
     lc_resp = client.get("/api/admin/location-coverage", headers=headers)
     assert lc_resp.status_code == 200
     lc = lc_resp.json()
-    assert lc["total_states"] >= 5
-    assert lc["total_towns"] >= 20
+    assert lc["total_states"] >= 30
+    assert lc["total_towns"] >= 80
+
+def test_multilingual_translation_and_languages(client):
+    # Test supported languages endpoint
+    lang_resp = client.get("/api/translate/languages")
+    assert lang_resp.status_code == 200
+    langs = lang_resp.json()
+    assert len(langs) >= 13
+    codes = [l["code"] for l in langs]
+    for expected in ["en", "hi", "bn", "ta", "te", "mr", "gu", "kn", "ml", "pa", "or", "as", "ur"]:
+        assert expected in codes
+
+    # Test translate endpoint
+    trans_resp = client.post("/api/translate", json={"text": "critical_risk", "target_lang": "hi"})
+    assert trans_resp.status_code == 200
+    assert "जोखिम" in trans_resp.json()["translated_text"]
+
+    # Test localized safety bulletin
+    bulletin_resp = client.post("/api/translate/bulletin", json={"risk_level": "Elevated", "language": "hi"})
+    assert bulletin_resp.status_code == 200
+    bulletin = bulletin_resp.json()
+    assert len(bulletin["precautions"]) >= 4
+    assert "112" in bulletin["emergency_contacts"]
+
+    # Test multilingual assistant chat
+    chat_resp = client.post("/api/assistant/chat", json={
+        "message": "What is the flood risk in Kashmere Gate?",
+        "language": "hi",
+        "location_id": "delhi_yamuna"
+    })
+    assert chat_resp.status_code == 200
+    chat_data = chat_resp.json()
+    assert "अस्वीकरण" in chat_data["disclaimer"]
+
+def test_data_sources_status_report(client):
+    report_resp = client.get("/api/data-sources/status-report")
+    assert report_resp.status_code == 200
+    report = report_resp.json()
+    assert "connected_sources" in report
+    assert "credentials_required_sources" in report
+    assert "location_coverage" in report
+    assert report["location_coverage"]["total_tracked_towns"] >= 80
+    assert report["location_coverage"]["coverage_completeness_pct"] == 100.0
+
+def test_pan_india_36_states_uts_coverage(client):
+    hier_resp = client.get("/api/locations/hierarchy")
+    assert hier_resp.status_code == 200
+    data = hier_resp.json()
+    # 28 states + 8 UTs = 36 total
+    assert len(data["states"]) == 36
+    total_towns = sum(s["towns_count"] for s in data["states"])
+    assert total_towns >= 81
 

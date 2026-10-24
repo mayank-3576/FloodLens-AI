@@ -611,11 +611,15 @@ export const api = {
     return request<DataSource[]>(`${API_BASE}/data-sources`);
   },
 
+  getDataSourcesStatusReport: async (): Promise<any> => {
+    return request<any>(`${API_BASE}/data-sources/status-report`);
+  },
+
   getReferenceGeoJSON: async (): Promise<any> => {
     return request<any>(`${API_BASE}/data-sources/geojson/reference`);
   },
 
-  askAssistant: async (message: string, locationId?: string, history?: any[]): Promise<AssistantChatResponse> => {
+  askAssistant: async (message: string, locationId?: string, history?: any[], language?: string): Promise<AssistantChatResponse> => {
     // Check if offline: provide localized rule-based grounded response from cached bundle
     if (!navigator.onLine) {
       const cached = await offlineStorage.getSyncBundle();
@@ -626,7 +630,7 @@ export const api = {
 
       return {
         reply: `[OFFLINE LOCAL INTELLIGENCE] Operating from locally cached observations and advisories.\n\n` +
-          `• Location Context: ${loc ? loc.name : 'Yamuna River Basin'}\n` +
+          `• Location Context: ${loc ? (loc.town || loc.name) : 'Yamuna River Basin'}\n` +
           `• Last Synced Observed Precipitation: ${latestRain} mm\n` +
           `• Active Cached Early Warnings: ${warnings.length > 0 ? warnings.map(w => `[${w.stage.toUpperCase()}] ${w.title}`).join('; ') : 'No active alerts in local cache'}\n\n` +
           `Notice: Real-time queries and extended model re-evaluations require active internet connectivity.`,
@@ -641,7 +645,7 @@ export const api = {
     return request<AssistantChatResponse>(`${API_BASE}/assistant/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, location_id: locationId, history: history || [] })
+      body: JSON.stringify({ message, location_id: locationId, language: language || 'en', history: history || [] })
     });
   },
 

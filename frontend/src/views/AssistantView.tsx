@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Location, Citation } from '../types';
 import { api } from '../services/api';
+import { useTranslation } from '../context/LanguageContext';
 
 interface Message {
   id: string;
@@ -33,6 +34,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
   locations,
   activeLocationId
 }) => {
+  const { language, t } = useTranslation();
   const activeLocation = locations.find(l => l.id === activeLocationId);
 
   const [messages, setMessages] = useState<Message[]>([
@@ -95,7 +97,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
         content: m.text
       }));
 
-      const res = await api.askAssistant(textToSend, activeLocationId, historyPayload);
+      const res = await api.askAssistant(textToSend, activeLocationId, historyPayload, language);
 
       const assistantMessage: Message = {
         id: `asst_${Date.now()}`,

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import {
   Shield, ChevronDown, Info, MapPin, Wifi, WifiOff,
   RefreshCw, Bell, User as UserIcon, LogOut, CheckCheck,
-  CheckCircle
+  CheckCircle, Globe
 } from 'lucide-react';
 import { Location } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/LanguageContext';
 import { api } from '../services/api';
 
 interface HeaderProps {
@@ -40,6 +41,8 @@ export const Header: React.FC<HeaderProps> = ({
     unreadCount,
     refreshNotifications
   } = useAuth();
+
+  const { language, setLanguage, supportedLanguages, currentLanguageOption, t } = useTranslation();
 
   const [showNotifDrawer, setShowNotifDrawer] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -127,7 +130,7 @@ export const Header: React.FC<HeaderProps> = ({
                 id="location-select"
                 value={activeLocationId}
                 onChange={(e) => onLocationChange(e.target.value)}
-                className="bg-transparent text-slate-900 font-semibold focus:outline-none cursor-pointer pr-4 appearance-none text-xs max-w-[200px] sm:max-w-xs truncate"
+                className="bg-transparent text-slate-900 font-semibold focus:outline-none cursor-pointer pr-4 appearance-none text-xs max-w-[170px] sm:max-w-xs truncate"
               >
                 {locations.map((loc) => (
                   <option key={loc.id} value={loc.id} className="bg-white text-slate-900">
@@ -136,6 +139,28 @@ export const Header: React.FC<HeaderProps> = ({
                 ))}
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 pointer-events-none -ml-3" />
+            </div>
+          </div>
+
+          {/* Multilingual Selector (13 Indian Languages) */}
+          <div className="relative">
+            <label htmlFor="language-select" className="sr-only">Select Language</label>
+            <div className="flex items-center bg-teal-50/70 border border-teal-200 hover:border-teal-500 rounded-lg px-2.5 py-1.5 transition-all text-xs focus-within:ring-2 focus-within:ring-teal-500/20">
+              <Globe className="w-3.5 h-3.5 text-teal-700 mr-1.5 shrink-0" />
+              <select
+                id="language-select"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="bg-transparent text-teal-900 font-bold focus:outline-none cursor-pointer pr-4 appearance-none text-xs"
+                title="Select Language (Bhashini AI / Offline Localized)"
+              >
+                {supportedLanguages.map((l) => (
+                  <option key={l.code} value={l.code} className="bg-white text-slate-900">
+                    {l.nativeName} ({l.name})
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-teal-600 pointer-events-none -ml-3" />
             </div>
           </div>
 

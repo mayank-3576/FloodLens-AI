@@ -109,7 +109,7 @@ export const CompareLocationsView: React.FC<CompareLocationsViewProps> = ({ loca
                 }`}
               >
                 {isSelected ? <Check className="w-3.5 h-3.5" /> : <span className="w-3.5" />}
-                <span>{loc.name.split(' (')[0]}</span>
+                <span>{loc.town || loc.name.split(' (')[0]} ({loc.district})</span>
               </button>
             );
           })}

@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
 import { Info, X, ShieldAlert } from 'lucide-react';
+import { useTranslation } from '../context/LanguageContext';
 
 interface NoticeBannerProps {
   message?: string;
 }
 
 export const NoticeBanner: React.FC<NoticeBannerProps> = ({
-  message = "This dashboard supports awareness and planning. It does not guarantee flood predictions or replace official emergency alerts."
+  message
 }) => {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(true);
 
   if (!visible) return null;
+
+  const displayMessage = message || t(
+    'disclaimer_text',
+    'This dashboard supports awareness and planning. It does not guarantee flood predictions or replace official emergency alerts.'
+  );
 
   return (
     <div className="bg-amber-50/90 border-b border-amber-200/80 px-4 py-2 text-xs text-amber-900 flex items-center justify-between">
       <div className="flex items-center gap-2.5 max-w-6xl mx-auto flex-1">
         <span className="inline-flex items-center gap-1 font-semibold text-amber-800 text-[11px] bg-amber-100/90 px-2 py-0.5 rounded-full border border-amber-300">
           <Info className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-          <span>Notice</span>
+          <span>{t('disclaimer_title', 'Notice')}</span>
         </span>
         <span className="text-slate-700 leading-relaxed font-medium">
-          {message}
+          {displayMessage}
         </span>
       </div>
       <button

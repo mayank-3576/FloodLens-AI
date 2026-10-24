@@ -14,6 +14,7 @@ import {
   LogIn
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/LanguageContext';
 
 export type NavTab = 
   | 'overview'
@@ -42,29 +43,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCloseMobile
 }) => {
   const { isAuthenticated, isAdmin } = useAuth();
+  const { t } = useTranslation();
 
   const publicNavItems: Array<{ id: NavTab; label: string; icon: React.ReactNode; badge?: string; badgeColor?: string }> = [
-    { id: 'overview', label: 'Overview', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { id: 'overview', label: t('citizen_dashboard', 'Citizen Dashboard'), icon: <LayoutDashboard className="w-4 h-4" /> },
     {
       id: 'early-warning',
-      label: 'Early Warning & Alerts',
+      label: t('early_warning', 'Early Warnings (0-14d)'),
       icon: <AlertTriangle className="w-4 h-4 text-amber-600" />,
-      badge: 'Multi-Stage',
+      badge: '0-14d',
       badgeColor: 'bg-amber-100 text-amber-900 border-amber-200'
     },
-    { id: 'rainfall', label: 'Recent Rainfall', icon: <CloudRain className="w-4 h-4" /> },
-    { id: 'history', label: 'Past Flood Events', icon: <History className="w-4 h-4" /> },
-    { id: 'map', label: 'Explore Your Area', icon: <Compass className="w-4 h-4" /> },
-    { id: 'compare', label: 'Compare Locations', icon: <GitCompare className="w-4 h-4" /> },
+    { id: 'rainfall', label: t('rainfall', 'Rainfall Trends'), icon: <CloudRain className="w-4 h-4" /> },
+    { id: 'history', label: t('flood_history', 'Historical Records'), icon: <History className="w-4 h-4" /> },
+    { id: 'map', label: t('explore_map', 'Explore Flood Map'), icon: <Compass className="w-4 h-4" /> },
+    { id: 'compare', label: t('compare', 'Town Comparison'), icon: <GitCompare className="w-4 h-4" /> },
     {
       id: 'community-reports',
-      label: 'Community Reports',
+      label: t('reports', 'Community Reports'),
       icon: <FileText className="w-4 h-4" />,
-      badge: 'Citizen Intel',
+      badge: 'Ground Intel',
       badgeColor: 'bg-teal-100 text-teal-900 border-teal-200'
     },
-    { id: 'assistant', label: 'FloodLens AI Helper', icon: <Bot className="w-4 h-4" />, badge: 'AI Assistant' },
-    { id: 'datasources', label: 'Data Sources & Reliability', icon: <Database className="w-4 h-4" /> },
+    { id: 'assistant', label: t('ai_assistant', 'GIRI AI Assistant'), icon: <Bot className="w-4 h-4" />, badge: 'Multilingual' },
+    { id: 'datasources', label: t('data_sources', 'Data Sources & Audit'), icon: <Database className="w-4 h-4" /> },
   ];
 
   const handleSelect = (tab: NavTab) => {
